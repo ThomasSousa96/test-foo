@@ -65,3 +65,10 @@ jobs:
           annotations: ${{ steps.docker_meta.outputs.annotations }}
           build-args: |
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
+
+      - name: Update repo description
+        uses: peter-evans/dockerhub-description@v4.0.0 # v4.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
