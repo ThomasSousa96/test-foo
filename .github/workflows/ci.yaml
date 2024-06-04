@@ -25,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      deployments: write
       packages: write
     steps:
       - name: Checkout code
