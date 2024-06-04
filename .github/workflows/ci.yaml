@@ -34,7 +34,7 @@ jobs:
         name: Docker meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/ThomasSousa96/test-foo
+          images: ${{ env.REGISTRY }}/ThomasSousa96/go
           tags: |
             type=schedule
             type=semver,pattern={{version}}
