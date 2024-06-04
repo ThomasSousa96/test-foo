@@ -42,7 +42,6 @@ jobs:
             type=semver,pattern={{major}}-${{ env.GO_MAJOR_MINOR_VERSION }}
             type=semver,pattern={{major}}-${{ env.GO_VERSION }}
             type=semver,pattern={{major}}-${{ env.BASE_IMAGE_TAG }}
-            type=ref,event=branch
             type=ref,event=pr
             type=sha
           labels: |
@@ -66,9 +65,9 @@ jobs:
           build-args: |
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
 
-      - name: Update repo description
-        uses: peter-evans/dockerhub-description@v4.0.0 # v4.0.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+      # - name: Update repo description
+      #   uses: peter-evans/dockerhub-description@v4.0.0 # v4.0.0
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #     repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
