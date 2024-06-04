@@ -24,18 +24,18 @@ jobs:
       matrix:
         version_prefix: [
           "latest",
-          "${{ env.IMAGE_MAJOR_VERSION }}",
-          "${{ env.IMAGE_MAJOR_MINOR_VERSION }}",
-          "${{ env.IMAGE_VERSION }}"
+          # "${{ env.IMAGE_MAJOR_VERSION }}",
+          # "${{ env.IMAGE_MAJOR_MINOR_VERSION }}",
+          # "${{ env.IMAGE_VERSION }}"
         ]
         suffix_version: [
           "",
-          "-${{ env.GO_MAJOR_VERSION }}",
-          "-${{ env.GO_MAJOR_VERSION }}-${{ env.BASE_IMAGE_OS_VERSION }}",
-          "-${{ env.GO_MAJOR_MINOR_VERSION }}",
-          "-${{ env.GO_MAJOR_MINOR_VERSION }}-${{ env.BASE_IMAGE_OS_VERSION }}",
-          "-${{ env.GO_VERSION }}",
-          "-${{ env.BASE_IMAGE_VERSION }}",
+          # "-${{ env.GO_MAJOR_VERSION }}",
+          # "-${{ env.GO_MAJOR_VERSION }}-${{ env.BASE_IMAGE_OS_VERSION }}",
+          # "-${{ env.GO_MAJOR_MINOR_VERSION }}",
+          # "-${{ env.GO_MAJOR_MINOR_VERSION }}-${{ env.BASE_IMAGE_OS_VERSION }}",
+          # "-${{ env.GO_VERSION }}",
+          # "-${{ env.BASE_IMAGE_VERSION }}",
         ]
     steps:
       - name: Checkout code
