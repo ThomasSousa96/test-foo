@@ -49,6 +49,8 @@ jobs:
           #   type=semver,pattern={{major}}-${{ env.BASE_IMAGE_TAG }}
           #   type=ref,event=pr
           #   type=sha
+          flavor: |
+            prefix=$REGISTRY
           labels: |
             org.opencontainers.image.description=Foooooooo
 
