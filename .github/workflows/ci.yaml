@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: CI
 
 on:
   workflow_dispatch:
@@ -60,5 +60,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+          annotations: ${{ steps.docker_meta.outputs.annotations }}
           build-args: |
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
