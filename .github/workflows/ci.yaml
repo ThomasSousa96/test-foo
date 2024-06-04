@@ -35,7 +35,7 @@ jobs:
         name: Docker meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          images: ThomasSousa96/test-foo
           tags: |
             type=schedule
             type=semver,pattern={{version}}
