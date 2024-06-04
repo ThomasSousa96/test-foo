@@ -1,15 +1,42 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   push:
     branches: [ main ]
 
-env:
+env: 
+  GO_MAJOR_VERSION: 1
+  GO_MAJOR_MINOR_VERSION: ${{ GO_MAJOR_VERSION }}.22
+  GO_VERSION: ${{ GO_MAJOR_MINOR_VERSION }}.3
+  
+  BASE_IMAGE_OS_VERSION: bullseye
+  BASE_IMAGE_VERSION: ${{ GO_VERSION }}-${{ BASE_IMAGE_OS_VERSION }}
+  
   IMAGE_NAME: go
+  IMAGE_MAJOR_VERSION: 1
+  IMAGE_MAJOR_MINOR_VERSION: ${{ IMAGE_MAJOR_VERSION }}.0
+  IMAGE_VERSION: ${{ IMAGE_MAJOR_MINOR_VERSION }}.0
 
 jobs:
-  build:
+  build_and_push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version_prefix: [
+          "latest",
+          "${{ IMAGE_MAJOR_VERSION }}",
+          "${{ IMAGE_MAJOR_MINOR_VERSION }}",
+          "${{ IMAGE_VERSION }}"
+        ]
+        suffix_version: [
+          "",
+          "-${{ GO_MAJOR_VERSION }}",
+          "-${{ GO_MAJOR_VERSION }}-${{ BASE_IMAGE_OS_VERSION }}",
+          "-${{ GO_MAJOR_MINOR_VERSION }}",
+          "-${{ GO_MAJOR_MINOR_VERSION }}-${{ BASE_IMAGE_OS_VERSION }}",
+          "-${{ GO_VERSION }}",
+          "-${{ BASE_IMAGE_VERSION }}",
+        ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -20,8 +47,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ IMAGE_NAME }}:latest .
-
-      - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ IMAGE_NAME }}:latest
+      - name: Build and push image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ IMAGE_NAME }}:${{ matrix.version_prefix }}${{ matrix.suffix_version }} --build-arg BASE_IMAGE_VERSION=${{ BASE_IMAGE_VERSION }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ IMAGE_NAME }}:${{ matrix.version_prefix }}${{ matrix.suffix_version }}
