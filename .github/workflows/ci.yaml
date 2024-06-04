@@ -36,19 +36,19 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ThomasSousa96/test-foo
-          tags: |
-            type=schedule
-            type=semver,pattern={{version}}
-            type=semver,pattern={{version}}-${{ env.BASE_IMAGE_TAG }}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}.{{minor}}-${{ env.GO_MAJOR_MINOR_VERSION }}
-            type=semver,pattern={{major}}.{{minor}}-${{ env.GO_VERSION }}
-            type=semver,pattern={{major}}
-            type=semver,pattern={{major}}-${{ env.GO_MAJOR_MINOR_VERSION }}
-            type=semver,pattern={{major}}-${{ env.GO_VERSION }}
-            type=semver,pattern={{major}}-${{ env.BASE_IMAGE_TAG }}
-            type=ref,event=pr
-            type=sha
+          # tags: |
+          #   type=schedule
+          #   type=semver,pattern={{version}}
+          #   type=semver,pattern={{version}}-${{ env.BASE_IMAGE_TAG }}
+          #   type=semver,pattern={{major}}.{{minor}}
+          #   type=semver,pattern={{major}}.{{minor}}-${{ env.GO_MAJOR_MINOR_VERSION }}
+          #   type=semver,pattern={{major}}.{{minor}}-${{ env.GO_VERSION }}
+          #   type=semver,pattern={{major}}
+          #   type=semver,pattern={{major}}-${{ env.GO_MAJOR_MINOR_VERSION }}
+          #   type=semver,pattern={{major}}-${{ env.GO_VERSION }}
+          #   type=semver,pattern={{major}}-${{ env.BASE_IMAGE_TAG }}
+          #   type=ref,event=pr
+          #   type=sha
           labels: |
             org.opencontainers.image.description=Foooooooo
 
