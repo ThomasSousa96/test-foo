@@ -45,6 +45,8 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=sha
+          labels: |
+            org.opencontainers.image.description=Foooooooo
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
