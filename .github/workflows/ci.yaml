@@ -51,6 +51,19 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{version}}-${{ env.BASE_IMAGE_VERSION }}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}.{{minor}}-${{ env.GO_MAJOR_MINOR_VERSION }}
+            type=semver,pattern={{major}}.{{minor}}-${{ env.GO_VERSION }}
+            type=semver,pattern={{major}}
+            type=semver,pattern={{major}}-${{ env.GO_MAJOR_MINOR_VERSION }}
+            type=semver,pattern={{major}}-${{ env.GO_VERSION }}
+            type=semver,pattern={{major}}-${{ env.BASE_IMAGE_VERSION }}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
