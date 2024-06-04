@@ -3,6 +3,11 @@ name: Build and Push Docker Images
 on:
   push:
     branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'master'
 
 env: 
   GO_MAJOR_VERSION: 1
