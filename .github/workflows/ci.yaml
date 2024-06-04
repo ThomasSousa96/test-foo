@@ -24,6 +24,7 @@ jobs:
     name: Build and Push
     runs-on: ubuntu-latest
     permissions:
+      actions: read
       packages: write
     steps:
       - name: Checkout code
