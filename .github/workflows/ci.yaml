@@ -20,28 +20,35 @@ env:
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version_prefix: [
-          "latest",
-          "1", # Major image version
-          "1.0", # Major and minor image version
-          "1.0.0" # Image version
-        ]
-        suffix_version: [
-          "", # Empty, to generate tags using only prefixes
-          "1", # Go major version
-          "-1-bullseye", # Go major version - base image OS version
-          "-1.22", # Go major and minor version
-          "-1.22-bullseye", # Go major and minor version - base image OS version
-          "-1.22.3", # Go version
-          "-1.22.3-bullseye", # Base image version
-        ]
+    # strategy:
+    #   matrix:
+    #     version_prefix: [
+    #       "1", # Major image version
+    #       "1.0", # Major and minor image version
+    #       "1.0.0" # Image version
+    #     ]
+    #     suffix_version: [
+    #       "1", # Go major version
+    #       "-1-bullseye", # Go major version - base image OS version
+    #       "-1.22", # Go major and minor version
+    #       "-1.22-bullseye", # Go major and minor version - base image OS version
+    #       "-1.22.3", # Go version
+    #       "-1.22.3-bullseye", # Base image version
+    #     ]
+    #     include:
+    #       - version_prefix: "latest"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - id: docker_meta
+        name: Docker meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+
       - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -50,7 +57,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ matrix.version_prefix }}${{ matrix.suffix_version }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
             BASE_IMAGE_VERSION=${{ env.BASE_IMAGE_VERSION }}
