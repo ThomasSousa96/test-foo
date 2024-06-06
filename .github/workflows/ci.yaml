@@ -42,7 +42,7 @@ jobs:
       - name: Define env.IMAGE_NAMES
         run: |
           IMAGE_NAMES=$IMAGE_NAME
-          if [[ $PUSH_TO_GHCR ]]; then
+          if [[ "$PUSH_TO_GHCR" == "true" ]]; then
             GHCR_IMAGE_NAME="$GHCR_ADDRESS/$IMAGE_NAME"
             IMAGE_NAMES="$IMAGE_NAMES\n$GHCR_IMAGE_NAME"
           fi
