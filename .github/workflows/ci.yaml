@@ -35,8 +35,9 @@ jobs:
       - name: Dependency review
         uses: actions/dependency-review-action@v4
         with:
-          base_ref: main
           comment-summary-in-pr: true
+          base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
+          head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
       - name: Define env.IMAGE_NAMES
         run: |
