@@ -19,9 +19,6 @@ env:
   PUSH_TO_DOCKER_HUB: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
   PUSH_TO_GHCR: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
   GHCR_ADDRESS: ghcr.io
-  IMAGE_NAMES2: |
-    foo
-    bar
 
 jobs:
   review:
@@ -56,7 +53,10 @@ jobs:
           IMAGE_NAMES=$IMAGE_NAME
           if [[ "$PUSH_TO_GHCR" == "true" ]]; then
             GHCR_IMAGE_NAME="$GHCR_ADDRESS/$IMAGE_NAME"
-            IMAGE_NAMES=$(echo "$IMAGE_NAMES\n$GHCR_IMAGE_NAME")
+            message=$(cat <<'EOF'
+            $IMAGE_NAMES
+            $GHCR_IMAGE_NAME
+            EOF)
           fi
           echo "IMAGE_NAMES=$IMAGE_NAMES" >> $GITHUB_ENV
 
