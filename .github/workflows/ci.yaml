@@ -53,7 +53,7 @@ jobs:
           IMAGE_NAMES=$IMAGE_NAME
           if [[ "$PUSH_TO_GHCR" == "true" ]]; then
             GHCR_IMAGE_NAME="$GHCR_ADDRESS/$IMAGE_NAME"
-            message=$(cat <<'EOF'
+            message=$(cat <<EOF
             $IMAGE_NAMES
             $GHCR_IMAGE_NAME
             EOF)
