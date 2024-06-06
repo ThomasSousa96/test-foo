@@ -19,6 +19,9 @@ env:
   PUSH_TO_DOCKER_HUB: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
   PUSH_TO_GHCR: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
   GHCR_ADDRESS: ghcr.io
+  IMAGE_NAMES2: |
+    foo
+    bar
 
 jobs:
   review:
