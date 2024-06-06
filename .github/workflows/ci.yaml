@@ -53,12 +53,10 @@ jobs:
           IMAGE_NAMES=$IMAGE_NAME
           if [[ "$PUSH_TO_GHCR" == "true" ]]; then
             GHCR_IMAGE_NAME="$GHCR_ADDRESS/$IMAGE_NAME"
-            message=$(cat <<EOF
-            $IMAGE_NAMES
-            $GHCR_IMAGE_NAME
-            EOF)
+            IMAGE_NAMES="$IMAGE_NAMES\n$GHCR_IMAGE_NAME"
           fi
-          echo "IMAGE_NAMES=$IMAGE_NAMES" >> $GITHUB_ENV
+          echo "::info $IMAGE_NAMES"
+          echo "IMAGE_NAMES=$IMAGE_NAMES<<EOF" >> $GITHUB_ENV
 
       - id: docker_meta
         name: Extract docker metadata
