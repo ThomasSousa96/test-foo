@@ -33,6 +33,7 @@ jobs:
           fetch-depth: 0
 
       - name: Add labels
+        if: ${{ github.event_name == 'pull_request' }}
         uses: actions/labeler@v5
 
       - name: Dependency review
@@ -49,6 +50,7 @@ jobs:
 
   build_and_push:
     name: Build and Push
+    needs: review
     runs-on: ubuntu-latest
     permissions:
       contents: read
