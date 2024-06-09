@@ -24,11 +24,11 @@ type/test:
 
 scope/readme:
 - changed-files:
-  - any-glob-to-any-file: /README.md
+  - any-glob-to-any-file: README.md
 
 scope/license:
 - changed-files:
-  - any-glob-to-any-file: /LICENSE.md
+  - any-glob-to-any-file: LICENSE.md
 
 scope/git:
 - changed-files:
