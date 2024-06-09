@@ -1,0 +1,41 @@
+type/build:
+ - head-branch: ^build/
+
+type/ci:
+ - head-branch: ^ci/
+
+type/docs:
+ - head-branch: ^docs/
+
+type/feat:
+ - head-branch: ^feat/
+
+type/fix:
+ - head-branch: ^fix/
+
+type/perf:
+ - head-branch: ^perf/
+
+type/refactor:
+ - head-branch: ^refactor/
+
+type/test:
+ - head-branch: ^test/
+
+scope/readme:
+- changed-files:
+  - any-glob-to-any-file: /README.md
+
+scope/license:
+- changed-files:
+  - any-glob-to-any-file: /LICENSE.md
+
+scope/git:
+- changed-files:
+  - any-glob-to-any-file: .gitignore
+
+scope/docker:
+- changed-files:
+  - any-glob-to-any-file: 
+    - .dockerignore
+    - Dockerfile
