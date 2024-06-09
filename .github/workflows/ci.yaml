@@ -32,6 +32,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Add labels
+        uses: actions/labeler@v5
+
       - name: Dependency review
         if: ${{ github.event_name == 'pull_request' }}
         uses: actions/dependency-review-action@v4
