@@ -41,6 +41,7 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           comment-summary-in-pr: true
+          allow-licenses: MIT
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
