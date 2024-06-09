@@ -110,6 +110,7 @@ jobs:
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
 
       - name: Create Github release
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
         uses: |
           gh api \
             --method POST \
