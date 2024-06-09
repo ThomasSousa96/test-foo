@@ -41,10 +41,7 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           comment-summary-in-pr: true
-          fail-on-scopes: |
-            runtime
-            development
-            unknown
+          fail-on-scopes: runtime,development,unknown
           license-check: true
           vulnerability-check: true
 
