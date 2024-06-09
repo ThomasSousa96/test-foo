@@ -21,20 +21,26 @@ env:
   GHCR_ADDRESS: ghcr.io
 
 jobs:
-  review:
-    name: Review
+  add-labels:
+    name: Add labels
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Add labels       
+        uses: actions/labeler@v5
+
+  dependency-review:
+    name: Dependency review
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Add labels
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: actions/labeler@v5
 
       - name: Dependency review
         if: ${{ github.event_name == 'pull_request' }}
@@ -45,6 +51,17 @@ jobs:
           license-check: true
           vulnerability-check: true
 
+  sonnar:
+    name: Sonnar Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -53,7 +70,9 @@ jobs:
 
   build_and_push:
     name: Build and Push
-    needs: review
+    needs:
+      - dependency-review
+      - sonnar
     runs-on: ubuntu-latest
     permissions:
       contents: read
