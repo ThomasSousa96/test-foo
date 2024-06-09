@@ -41,7 +41,9 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           comment-summary-in-pr: true
-          allow-licenses: MIT
+          fail-on-scopes: runtime,development,unknown
+          license-check: true
+          vulnerability-check: true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -79,9 +81,7 @@ jobs:
             type=semver,pattern={{major}}-${{ env.BASE_IMAGE_NAME_PREFIX }}-${{ env.BASE_IMAGE_MAJOR_VERSION }}.${{ env.BASE_IMAGE_MINOR_VERSION }}
             type=semver,pattern={{major}}.{{minor}}-${{ env.BASE_IMAGE_NAME_PREFIX }}-${{ env.BASE_IMAGE_MAJOR_VERSION }}.${{ env.BASE_IMAGE_MINOR_VERSION }}
             type=semver,pattern={{version}}-${{ env.BASE_IMAGE_NAME_PREFIX }}-${{ env.BASE_IMAGE_TAG }}
-            type=edge,branch=main
             type=ref,event=pr
-            type=sha
 
       - name: Login to the Docker Hub
         if: ${{ env.PUSH_TO_DOCKER_HUB }}
