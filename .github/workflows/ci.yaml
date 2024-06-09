@@ -111,7 +111,7 @@ jobs:
 
       - name: Create Github release
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
-        uses: |
+        run: |
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
