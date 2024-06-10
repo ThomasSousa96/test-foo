@@ -15,7 +15,7 @@ jobs:
 
       - name: Github cache list
         run: |
-          gh cache list --jq '.[] | {id, key, ref, sizeInBytes, version, lastAccessedAt, createdAt}'
+          gh cache list --json --jq '.[] | {id, key, ref, sizeInBytes, version, lastAccessedAt, createdAt}'
       - name: Github Actions cache cleanup
         run: |
           echo "Fetching list of cache key"
