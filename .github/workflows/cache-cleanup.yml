@@ -1,0 +1,28 @@
+name: Cache cleanup
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  gh-cache-cleanup:
+    name: Github cache cleanup
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Github cache list
+        run: |
+          gh cache list
+      - name: Github Actions cache cleanup
+        run: |
+          echo "Fetching list of cache key"
+          cacheKeysForPR=$(gh actions-cache list -R ${{ github.repository }} -B $BRANCH -L 100 | cut -f 1 )
+          
+          set +e
+          echo "Deleting caches..."
+          for cacheKey in $cacheKeysForPR
+          do
+              echo "Delete $cacheKey"
+              # gh actions-cache delete $cacheKey -R ${{ github.repository }} -B $BRANCH --confirm
+          done
+          echo "Done"
