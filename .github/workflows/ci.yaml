@@ -109,8 +109,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - id: build-and-push
-        name: Build and push
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -123,12 +122,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
     outputs:
-      imageid: ${{ steps.build-and-push.outputs.imageid }}
-      digest: ${{ steps.build-and-push.outputs.digest }}
-      metadata: ${{ steps.build-and-push.outputs.metadata }}
+      tags: ${{ steps.docker_meta.outputs.tags }}
 
   create-release:
     name: Create release
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
     needs: build-and-push
     runs-on: ubuntu-latest
     permissions:
@@ -138,7 +136,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create Github release
-        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NOTES: |
@@ -147,11 +144,9 @@ jobs:
             This is a test
 
             ## Image: 
-            * ${{ needs.build-and-push.outputs.imageid }}
-            * ${{ needs.build-and-push.outputs.digest }}
 
             ```
-            ${{ needs.build-and-push.outputs.metadata }}
+            ${{ needs.build-and-push.outputs.tags }}
             ```
             
         run: |
