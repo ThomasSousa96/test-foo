@@ -121,16 +121,9 @@ jobs:
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: test
-        run: |
-          echo "first tag: ${{ steps.docker_meta.outputs.tags[0] }}"
-          echo "second tag: ${{ steps.docker_meta.outputs.tags[1] }}"
-          echo "tags: ${{ steps.docker_meta.outputs.tags }}"
-          echo "DOCKER_METADATA_OUTPUT_TAGS=$DOCKER_METADATA_OUTPUT_TAGS"
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
-      tags2: ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
 
   create-release:
     name: Create release
@@ -155,7 +148,6 @@ jobs:
 
             ```
             ${{ needs.build-and-push.outputs.tags }}
-            ${{ needs.build-and-push.outputs.tags2 }}
             ```
             
         run: |
