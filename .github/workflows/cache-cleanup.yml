@@ -2,7 +2,9 @@ name: Cache cleanup
 
 on:
   workflow_dispatch:
-    
+  push:
+    branches: [ main ]
+
 jobs:
   gh-cache-cleanup:
     name: Github cache cleanup
