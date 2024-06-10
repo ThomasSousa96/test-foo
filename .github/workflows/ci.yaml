@@ -1,7 +1,6 @@
 name: CI
 
 on:
-  workflow_dispatch:
   push:
     branches: [ main ]
     tags:
@@ -68,7 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build_and_push:
+  build-and-push:
     name: Build and push
     needs:
       - dependency-review
@@ -152,7 +151,7 @@ jobs:
             
             This is a test
 
-            Image: ${{ needs.build_and_push.outputs.imageFullName }}
+            Image: ${{ needs.build-and-push.outputs.imageFullName }}
 
         run: |
           gh release create ${{ github.ref_name }} \
