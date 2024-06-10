@@ -13,7 +13,7 @@ env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
- get-cache-keys:
+  get-cache-keys:
     name: Get cache keys
     runs-on: ubuntu-latest
     permissions:
@@ -26,6 +26,7 @@ jobs:
         name: Get Github cache keys
         run: |
           CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key --jq '.[].key')
+          echo $CACHE_KEYS
           echo "cacheKeys=$CACHE_KEYS" >> $GITHUB_OUTPUT
     outputs:
       cacheKeys: ${{ steps.get-gh-cache-keys.outputs.cacheKeys }}
