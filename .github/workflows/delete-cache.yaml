@@ -8,8 +8,6 @@ on:
         required: true
         default: 1
         type: number
-  push:
-    branches: [ main ]
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
