@@ -22,6 +22,7 @@ jobs:
       - name: Delete Github cache
         run: |
           CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key)
+          echo "$CACHE_KEYS"
           for cacheKey in $cacheKeysForPR
           do
             echo "Delete $cacheKey"
