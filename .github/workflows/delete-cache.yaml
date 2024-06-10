@@ -1,0 +1,41 @@
+name: Delete cache
+
+on:
+  workflow_dispatch:
+    inputs:
+      oldest-cache-entries:
+        description: Oldest cache entries
+        required: true
+        default: 1
+        type: number
+
+jobs:
+  delete-cache:
+    name: Delete cache
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Delete Github cache
+        run: |
+          CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key)
+          for cacheKey in $cacheKeysForPR
+          do
+            echo "Delete $cacheKey"
+          done
+      # - name: Github Actions cache cleanup
+      #   run: |
+      #     echo "Fetching list of cache key"
+      #     cacheKeysForPR=$(gh actions-cache list -R ${{ github.repository }} -B $BRANCH -L 100 | cut -f 1 )
+          
+      #     set +e
+      #     echo "Deleting caches..."
+      #     for cacheKey in $cacheKeysForPR
+      #     do
+      #         echo "Delete $cacheKey"
+      #         # gh actions-cache delete $cacheKey -R ${{ github.repository }} -B $BRANCH --confirm
+      #     done
+      #     echo "Done"
