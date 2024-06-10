@@ -133,7 +133,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
     outputs:
-      imageFullName: ${{ steps.build-and-push.outputs.imageFullName }}
+      imageid: ${{ steps.build-and-push.outputs.imageid }}
+      digest: ${{ steps.build-and-push.outputs.digest }}
+      metadata: ${{ steps.build-and-push.outputs.metadata }}
 
   create-release:
     name: Create release
@@ -151,12 +153,18 @@ jobs:
             
             This is a test
 
-            Image: ${{ needs.build-and-push.outputs.imageFullName }}
+            ## Image: 
+            * ${{ needs.build-and-push.outputs.imageid }}
+            * ${{ needs.build-and-push.outputs.digest }}
 
+            ```
+            ${{ needs.build-and-push.outputs.metadata }}
+            ```
+            
         run: |
           gh release create ${{ github.ref_name }} \
             --title "${{ github.ref_name }}" \
-            --notes "${{ env.NOTES }}" \
+            --notes "$NOTES" \
             --latest \
             --verify-tag \
             --generate-notes \
