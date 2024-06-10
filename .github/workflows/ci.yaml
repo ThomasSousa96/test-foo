@@ -139,8 +139,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ github.ref_name }} \
-            --title "Version ${{ github.ref_name }}" \
-            --notes "# ${{ github.ref_name }}\nThis is a test" \
+            --title "${{ github.ref_name }}" \
+            --notes "# Version ${{ github.ref_name }}\n\nThis is a test" \
             --latest \
             --verify-tag \
             --generate-notes \
