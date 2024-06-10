@@ -13,8 +13,8 @@ env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  delete-cache:
-    name: Delete Github cache
+  get-cache-keys:
+    name: Get cache keys
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,18 +22,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get cache keys
+      - id: get-gh-cache-keys
+        name: Get Github cache keys
         run: |
-          CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key --jq '.[].key')
+          CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key --jq ".[].key | join(',')")
           echo $CACHE_KEYS
-          echo "cacheKeys=$CACHE_KEYS" >> $GITHUB_ENV
-      
-      - name: Delete cache
+          echo "cacheKeys=$CACHE_KEYS" >> $GITHUB_OUTPUT
+    outputs:
+      cacheKeys: ${{ fromJSON(steps.get-gh-cache-keys.outputs.cacheKeys) }}
+
+  delete-cache:
+    name: Delete cache
+    runs-on: ubuntu-latest
+    needs: get-cache-keys
+    permissions:
+      contents: read
+      actions: write
+    strategy:
+      matrix:
+        cache-key: ${{ needs.get-cache-keys.outputs.cacheKeys }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Delete Github cache ${{ matrix.cache-key }}
         run: |
-          set +e
-          for CACHE_KEY in $CACHE_KEYS
-          do
-            echo "Deleting cache by key: '$CACHE_KEY'
-            gh cache delete $CACHE_KEY
-          done
-    
+          gh cache delete ${{ matrix.cache-key }}
+
+        # run: |
+        #   CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key --jq '.[].key')
+        #   set +e
+        #   for CACHE_KEY in $CACHE_KEYS
+        #   do
+        #     echo "Deleting $CACHE_KEY..."
+        #     gh cache delete $CACHE_KEY
+        #   done
