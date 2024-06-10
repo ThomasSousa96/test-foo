@@ -15,7 +15,7 @@ jobs:
 
       - name: Github cache list
         run: |
-          gh cache list --json
+          gh cache list --jq *
       - name: Github Actions cache cleanup
         run: |
           echo "Fetching list of cache key"
