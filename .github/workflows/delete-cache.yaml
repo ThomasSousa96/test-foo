@@ -25,7 +25,7 @@ jobs:
       - id: get-gh-cache-keys
         name: Get Github cache keys
         run: |
-          CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key --jq ".[].key | join(',')")
+          CACHE_KEYS=$(gh cache list --order asc --limit ${{ inputs.oldest-cache-entries }} --json key --jq '.[].key | join(",")')
           echo $CACHE_KEYS
           echo "cacheKeys=$CACHE_KEYS" >> $GITHUB_OUTPUT
     outputs:
