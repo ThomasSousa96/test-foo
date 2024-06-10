@@ -31,7 +31,7 @@ jobs:
           echo $CACHE_KEYS
           echo "cacheKeys=$CACHE_KEYS" >> $GITHUB_OUTPUT
     outputs:
-      cacheKeys: ${{ fromJSON(steps.get-gh-cache-keys.outputs.cacheKeys) }}
+      cacheKeys: ${{ steps.get-gh-cache-keys.outputs.cacheKeys }}
 
   delete-cache:
     name: Delete cache
@@ -42,7 +42,7 @@ jobs:
       actions: write
     strategy:
       matrix:
-        cache-key: ${{ needs.get-cache-keys.outputs.cacheKeys }}
+        cache-key: ${{ fromJSON(needs.get-cache-keys.outputs.cacheKeys) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
