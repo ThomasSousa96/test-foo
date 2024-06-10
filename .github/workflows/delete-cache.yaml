@@ -29,7 +29,7 @@ jobs:
           echo $CACHE_KEYS
           echo "cacheKeys=$CACHE_KEYS" >> $GITHUB_OUTPUT
     outputs:
-      cacheKeys: "[${{ steps.get-gh-cache-keys.outputs.cacheKeys }}]"
+      cacheKeys: "['${{ steps.get-gh-cache-keys.outputs.cacheKeys }}']"
 
   delete-cache:
     name: Delete cache
