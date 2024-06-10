@@ -20,18 +20,6 @@ env:
   GHCR_ADDRESS: ghcr.io
 
 jobs:
-  add-labels:
-    name: Add labels
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Add labels       
-        uses: actions/labeler@v5
-
   dependency-review:
     name: Dependency review
     runs-on: ubuntu-latest
@@ -39,7 +27,8 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Dependency review
         if: ${{ github.event_name == 'pull_request' }}
@@ -57,7 +46,8 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -144,6 +134,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Create Github release
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
         env:
