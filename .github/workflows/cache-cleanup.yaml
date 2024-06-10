@@ -2,8 +2,6 @@ name: Cache cleanup
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
   gh-cache-cleanup:
@@ -12,6 +10,9 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Github cache list
         run: |
           gh cache list
