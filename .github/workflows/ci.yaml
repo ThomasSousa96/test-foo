@@ -198,7 +198,7 @@ jobs:
     name: Create release
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: ${{ success() }}
+    if: ${{ needs.build-and-push.result == 'success' }}
     permissions:
       contents: write
     steps:
