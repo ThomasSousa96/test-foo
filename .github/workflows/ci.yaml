@@ -250,7 +250,7 @@ jobs:
             --verify-tag \
             --generate-notes \
             --target main \
-            --discussion-category "General"
+            --discussion-category "Announcements"
   
   # sbom-upload:
   #   name: SBOM upload
