@@ -198,12 +198,15 @@ jobs:
     name: Create release
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: ${{ success() && github.ref_type == 'tag' }}
+    if: ${{ success() }}
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Test
+        run: |
+          echo "${{ github.ref_type }}"
 
       - name: Create Github release
         env:
@@ -254,6 +257,7 @@ jobs:
             --generate-notes \
             --target main \
             --discussion-category "announcements"
+          echo "$RELEASE_NOTES" >> $GITHUB_STEP_SUMMARY
   
   # sbom-upload:
   #   name: SBOM upload
