@@ -41,7 +41,6 @@ jobs:
   dependency-review:
     name: Dependency review
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
     permissions:
       contents: read
       pull-requests: write
@@ -52,7 +51,7 @@ jobs:
       - name: Dependency review
         uses: actions/dependency-review-action@v4
         with:
-          comment-summary-in-pr: true
+          comment-summary-in-pr: ${{ github.event_name == 'pull_request' }}
           fail-on-scopes: runtime,development,unknown
           license-check: true
           vulnerability-check: true
@@ -81,7 +80,6 @@ jobs:
       - dependency-review
       - sonnar
     runs-on: ubuntu-latest
-    if: ${{ !cancelled() && !failure() }}
     permissions:
       contents: read
       packages: write
@@ -198,15 +196,12 @@ jobs:
     name: Create release
     needs: build-and-push
     runs-on: ubuntu-latest
-    # if: ${{ needs.build-and-push.result == 'success' }}
+    if: ${{ success() && github.ref_type == 'tag' }}
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Test
-        run: |
-          echo "${{ github.ref_type }}"
 
       - name: Create Github release
         env:
