@@ -175,9 +175,10 @@ jobs:
 
         run: |
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
-          echo "BUILD_SUMMARY<<EOF" >> $GITHUB_ENV
-          echo $BUILD_SUMMARY >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "::set-env name=BUILD_SUMMARY::$BUILD_SUMMARY"
+        # echo "BUILD_SUMMARY<<EOF" >> $GITHUB_ENV
+        # echo $BUILD_SUMMARY >> $GITHUB_ENV
+        # echo "EOF" >> $GITHUB_ENV
 
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
