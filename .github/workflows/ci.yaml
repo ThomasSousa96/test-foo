@@ -84,7 +84,7 @@ jobs:
     if: | 
       ${{ 
         contains(fromJSON('["success", "skipped"]'), needs.dependency-review.result)
-        contains(fromJSON('["success", "skipped"]'), needs.sonnar.result)
+        && contains(fromJSON('["success", "skipped"]'), needs.sonnar.result)
       }}
 
     permissions:
