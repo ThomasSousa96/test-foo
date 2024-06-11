@@ -92,6 +92,7 @@ jobs:
             type=ref,event=pr
 
       - name: Generate build summary
+        id: generate-build-summary
         env:
           BUILD_SUMMARY: |
             # Docker image :rocket:
@@ -114,14 +115,14 @@ jobs:
             ${{ steps.docker_meta.outputs.annotations }}
             ```
 
-            ### Metadata
-
-            ```json
-            ${{ steps.docker_meta.outputs.metadata }}
-            ```
-
         run: |
+          echo "buildSummary=$BUILD_SUMMARY" >> $GITHUB_OUTPUT
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment on pull request
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          gh issue comment ${{ github.event.number }} --body "${{ steps.generate-build-summary.output.buildSummary }}"
 
       - name: Login to the Docker Hub
         if: ${{ env.PUSH_TO_DOCKER_HUB }}
