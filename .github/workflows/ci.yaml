@@ -100,55 +100,42 @@ jobs:
         id: generate-build-summary
         env:
           BUILD_SUMMARY: |
-            # Docker image :rocket:
-
-            ## Tags
+            ### [Docker image](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) :rocket:
             
-            ```
-            ${{ steps.docker_meta.outputs.tags }}
-            ```
-
-            ## Labels
+            <details open>
+              <summary>Tags</summary>
             
-            ```
-            ${{ steps.docker_meta.outputs.labels }}
-            ```
+              ```
+              ${{ steps.docker_meta.outputs.tags }}
+              ```
+            </details>
 
-            ## Annotations
-
-            ```
-            ${{ steps.docker_meta.outputs.annotations }}
-            ```
+            <details>
+              <summary>Labels</summary>
+            
+              ```
+              ${{ steps.docker_meta.outputs.labels }}
+              ```
+            </details>
+            
+            <details>
+              <summary>Annotations</summary>
+            
+              ```
+              ${{ steps.docker_meta.outputs.annotations }}
+              ```
+            </details>
 
         run: |
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
-
+          echo "BUILD_SUMMARY<<EOF" >> $GITHUB_ENV
+          echo $BUILD_SUMMARY >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
         env: 
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BUILD_SUMMARY: |
-            # Docker image :rocket:
-
-            ## Tags
-            
-            ```
-            ${{ steps.docker_meta.outputs.tags }}
-            ```
-
-            ## Labels
-            
-            ```
-            ${{ steps.docker_meta.outputs.labels }}
-            ```
-
-            ## Annotations
-
-            ```
-            ${{ steps.docker_meta.outputs.annotations }}
-            ```
-
         run: |
           gh issue comment ${{ github.event.number }} --body "$BUILD_SUMMARY"
 
