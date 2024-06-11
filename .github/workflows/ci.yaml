@@ -122,7 +122,7 @@ jobs:
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          gh issue comment ${{ github.event.number }} --body "${{ steps.generate-build-summary.output.buildSummary }}"
+          gh issue comment ${{ github.event.number }} --body "${{ steps.generate-build-summary.outputs.buildSummary }}"
 
       - name: Login to the Docker Hub
         if: ${{ env.PUSH_TO_DOCKER_HUB }}
