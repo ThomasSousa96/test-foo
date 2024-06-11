@@ -15,8 +15,8 @@ env:
   BASE_IMAGE_TAG: 1.22.3-bullseye
   BASE_IMAGE_NAME_PREFIX: go
   IMAGE_NAME: ${{ github.repository	}}
-  PUSH_TO_DOCKER_HUB: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
-  PUSH_TO_GHCR: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+  PUSH_TO_DOCKER_HUB: ${{ github.ref_type == 'tag' }}
+  PUSH_TO_GHCR: ${{ github.ref_type == 'tag' }}
   GHCR_ADDRESS: ghcr.io
 
 concurrency:
@@ -198,7 +198,7 @@ jobs:
     name: Create release
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+    if: ${{ !cancelled() && !failure() && github.ref_type == 'tag' }}
     permissions:
       contents: write
     steps:
