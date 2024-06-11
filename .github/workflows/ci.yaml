@@ -253,7 +253,7 @@ jobs:
             --verify-tag \
             --generate-notes \
             --target main \
-            --discussion-category "Announcements"
+            --discussion-category "announcements"
   
   # sbom-upload:
   #   name: SBOM upload
