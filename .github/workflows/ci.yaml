@@ -24,8 +24,8 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  add-labels:
-    name: Add labels
+  add-pr-labels:
+    name: Add PR labels
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     permissions:
@@ -35,7 +35,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Add labels
+      - name: Add PR labels
         uses: actions/labeler@v5
 
   dependency-review:
