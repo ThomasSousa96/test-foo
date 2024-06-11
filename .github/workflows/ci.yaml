@@ -81,6 +81,12 @@ jobs:
       - dependency-review
       - sonnar
     runs-on: ubuntu-latest
+    if: | 
+      ${{ 
+        contains(fromJSON('["success", "skipped"]'), needs.dependency-review.result)
+        contains(fromJSON('["success", "skipped"]'), needs.sonnar.result)
+      }}
+
     permissions:
       contents: read
       packages: write
