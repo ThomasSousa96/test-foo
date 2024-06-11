@@ -121,6 +121,12 @@ jobs:
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          sbom: true
+          provenance: mode=max
+  
+      - name: Test
+        run: |
+          ls -la
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
@@ -159,3 +165,15 @@ jobs:
             --generate-notes \
             --target main \
             --discussion-category "General"
+  
+  # sbom-upload:
+  #   name: SBOM upload
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - name: SBOM upload
+  #       uses: advanced-security/spdx-dependency-submission-action@v0.0.1
+  #       with:
+  #         filePath: "_manifest/spdx_2.2/"
