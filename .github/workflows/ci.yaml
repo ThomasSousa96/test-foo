@@ -19,7 +19,25 @@ env:
   PUSH_TO_GHCR: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
   GHCR_ADDRESS: ghcr.io
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  add-pr-labels:
+    name: Add PR labels
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Add PR labels
+        uses: actions/labeler@v5
+
   dependency-review:
     name: Dependency review
     runs-on: ubuntu-latest
@@ -66,6 +84,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -121,9 +140,56 @@ jobs:
             BASE_IMAGE_TAG=${{ env.BASE_IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          sbom: true
+          provenance: mode=max
+
+      - name: Generate build summary
+        id: generate-build-summary
+        env:
+          BUILD_SUMMARY: |
+            ### [Docker image](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) :rocket:
+            
+            <details open>
+              <summary>Tags</summary>
+            
+              ```
+              ${{ steps.docker_meta.outputs.tags }}
+              ```
+            </details>
+
+            <details>
+              <summary>Labels</summary>
+            
+              ```
+              ${{ steps.docker_meta.outputs.labels }}
+              ```
+            </details>
+            
+            <details>
+              <summary>Annotations</summary>
+            
+              ```
+              ${{ steps.docker_meta.outputs.annotations }}
+              ```
+            </details>
+
+        run: |
+          BUILD_SUMMARY_PATH="${{ runner.temp }}/build-summary.md"
+          echo "BUILD_SUMMARY_PATH=$BUILD_SUMMARY_PATH" >> $GITHUB_ENV
+          echo "$BUILD_SUMMARY" > $BUILD_SUMMARY_PATH
+          echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment on pull request
+        if: ${{ github.event_name == 'pull_request' }}
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ github.event.number }} --body-file $BUILD_SUMMARY_PATH
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
+      labels: ${{ steps.docker_meta.outputs.labels }}
+      annotations: ${{ steps.docker_meta.outputs.annotations }}
 
   create-release:
     name: Create release
@@ -139,17 +205,43 @@ jobs:
       - name: Create Github release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NOTES: |
+          RELEASE_NOTES: |
             # Version ${{ github.ref_name }}
             
-            This is a test
+            ## Changelog
 
-            ## Image: 
+            * ordgordighrdg
+            * çeflseropfespof
+            * epfpekpfespo
+            * rlfgrgprepogr
 
-            ```
-            ${{ needs.build-and-push.outputs.tags }}
-            ```
+            ## Docker image :rocket:
             
+            <details open>
+              <summary>Tags</summary>
+            
+              ```
+              ${{ needs.build-and-push.outputs.tags }}
+              ```
+            </details>
+
+            <details>
+              <summary>Labels</summary>
+            
+              ```
+              ${{ needs.build-and-push.outputs.labels }}
+              ```
+            </details>
+            
+            <details>
+              <summary>Annotations</summary>
+            
+              ```
+              ${{ needs.build-and-push.outputs.annotations }}
+              ```
+            </details>
+
+
         run: |
           gh release create ${{ github.ref_name }} \
             --title "${{ github.ref_name }}" \
@@ -159,3 +251,15 @@ jobs:
             --generate-notes \
             --target main \
             --discussion-category "General"
+  
+  # sbom-upload:
+  #   name: SBOM upload
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - name: SBOM upload
+  #       uses: advanced-security/spdx-dependency-submission-action@v0.0.1
+  #       with:
+  #         filePath: "_manifest/spdx_2.2/"
