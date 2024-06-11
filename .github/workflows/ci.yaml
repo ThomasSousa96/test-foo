@@ -85,6 +85,8 @@ jobs:
       contents: read
       packages: write
       pull-requests: write
+    env:
+      BUILD_SUMMARY_PATH: ${{ env.RUNNER_TEMP }}/build-summary.md
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -174,18 +176,15 @@ jobs:
             </details>
 
         run: |
+          echo "$BUILD_SUMMARY" > $BUILD_SUMMARY_PATH
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
-          echo "BUILD_SUMMARY<<EOF" >> $GITHUB_OUTPUT
-          echo $BUILD_SUMMARY >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
         env: 
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BODY: ${{ steps.generate-build-summary.outputs.BUILD_SUMMARY }}
         run: |
-          gh issue comment ${{ github.event.number }} --body "$BODY"
+          gh issue comment ${{ github.event.number }} --body-file $BUILD_SUMMARY_PATH
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
