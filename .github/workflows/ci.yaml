@@ -162,7 +162,7 @@ jobs:
         run: |
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
           echo "BUILD_SUMMARY<<EOF" >> $GITHUB_OUTPUT
-          echo "$BUILD_SUMMARY" >> $GITHUB_ENV
+          echo $BUILD_SUMMARY >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Comment on pull request
