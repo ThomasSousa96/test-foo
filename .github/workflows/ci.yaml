@@ -188,6 +188,8 @@ jobs:
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
+      labels: ${{ steps.docker_meta.outputs.labels }}
+      annotations: ${{ steps.docker_meta.outputs.annotations }}
 
   create-release:
     name: Create release
@@ -203,17 +205,43 @@ jobs:
       - name: Create Github release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NOTES: |
+          RELEASE_NOTES: |
             # Version ${{ github.ref_name }}
             
-            This is a test
+            ## Changelog
 
-            ## Image: 
+            * ordgordighrdg
+            * çeflseropfespof
+            * epfpekpfespo
+            * rlfgrgprepogr
 
-            ```
-            ${{ needs.build-and-push.outputs.tags }}
-            ```
+            ## Docker image :rocket:
             
+            <details open>
+              <summary>Tags</summary>
+            
+              ```
+              ${{ needs.build-and-push.outputs.tags }}
+              ```
+            </details>
+
+            <details>
+              <summary>Labels</summary>
+            
+              ```
+              ${{ needs.build-and-push.outputs.labels }}
+              ```
+            </details>
+            
+            <details>
+              <summary>Annotations</summary>
+            
+              ```
+              ${{ needs.build-and-push.outputs.annotations }}
+              ```
+            </details>
+
+
         run: |
           gh release create ${{ github.ref_name }} \
             --title "${{ github.ref_name }}" \
