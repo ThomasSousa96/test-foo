@@ -123,6 +123,7 @@ jobs:
         run: |
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
 
+
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
         env: 
@@ -149,7 +150,7 @@ jobs:
             ```
 
         run: |
-          gh issue comment ${{ github.event.number }} --body "${{ env.BUILD_SUMMARY }}"
+          gh issue comment ${{ github.event.number }} --body "$BUILD_SUMMARY"
 
       - name: Login to the Docker Hub
         if: ${{ env.PUSH_TO_DOCKER_HUB }}
