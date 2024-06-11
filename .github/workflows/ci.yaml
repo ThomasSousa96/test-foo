@@ -127,6 +127,7 @@ jobs:
       - name: Test
         run: |
           ls -la
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
