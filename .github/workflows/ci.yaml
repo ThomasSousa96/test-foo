@@ -70,6 +70,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -124,6 +125,29 @@ jobs:
 
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
+        env: 
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUILD_SUMMARY: |
+            # Docker image :rocket:
+
+            ## Tags
+            
+            ```
+            ${{ steps.docker_meta.outputs.tags }}
+            ```
+
+            ## Labels
+            
+            ```
+            ${{ steps.docker_meta.outputs.labels }}
+            ```
+
+            ## Annotations
+
+            ```
+            ${{ steps.docker_meta.outputs.annotations }}
+            ```
+
         run: |
           gh issue comment ${{ github.event.number }} --body "${{ env.BUILD_SUMMARY }}"
 
