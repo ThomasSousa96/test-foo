@@ -175,17 +175,17 @@ jobs:
 
         run: |
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
-          echo "::set-env name=BUILD_SUMMARY::$BUILD_SUMMARY"
-        # echo "BUILD_SUMMARY<<EOF" >> $GITHUB_ENV
-        # echo $BUILD_SUMMARY >> $GITHUB_ENV
-        # echo "EOF" >> $GITHUB_ENV
+          echo "BUILD_SUMMARY<<EOF" >> $GITHUB_OUTPUT
+          echo $BUILD_SUMMARY >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment on pull request
         if: ${{ github.event_name == 'pull_request' }}
         env: 
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BODY: ${{ steps.generate-build-summary.outputs.BUILD_SUMMARY }}
         run: |
-          gh issue comment ${{ github.event.number }} --body "$BUILD_SUMMARY"
+          gh issue comment ${{ github.event.number }} --body "$BODY"
 
     outputs:
       tags: ${{ steps.docker_meta.outputs.tags }}
