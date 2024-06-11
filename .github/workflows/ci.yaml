@@ -109,7 +109,9 @@ jobs:
             type=semver,pattern={{major}}-${{ env.BASE_IMAGE_NAME_PREFIX }}-${{ env.BASE_IMAGE_MAJOR_VERSION }}.${{ env.BASE_IMAGE_MINOR_VERSION }}
             type=semver,pattern={{major}}.{{minor}}-${{ env.BASE_IMAGE_NAME_PREFIX }}-${{ env.BASE_IMAGE_MAJOR_VERSION }}.${{ env.BASE_IMAGE_MINOR_VERSION }}
             type=semver,pattern={{version}}-${{ env.BASE_IMAGE_NAME_PREFIX }}-${{ env.BASE_IMAGE_TAG }}
+            type=ref,event=branch
             type=ref,event=pr
+            type=sha
 
       - name: Login to the Docker Hub
         if: ${{ env.PUSH_TO_DOCKER_HUB }}
