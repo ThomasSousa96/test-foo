@@ -85,8 +85,6 @@ jobs:
       contents: read
       packages: write
       pull-requests: write
-    env:
-      BUILD_SUMMARY_PATH: ${{ runner.temp }}/build-summary.md
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -176,6 +174,8 @@ jobs:
             </details>
 
         run: |
+          BUILD_SUMMARY_PATH="${{ runner.temp }}/build-summary.md"
+          echo "BUILD_SUMMARY_PATH=$BUILD_SUMMARY_PATH" >> $GITHUB_ENV
           echo "$BUILD_SUMMARY" > $BUILD_SUMMARY_PATH
           echo "$BUILD_SUMMARY" >> $GITHUB_STEP_SUMMARY
 
