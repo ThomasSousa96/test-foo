@@ -117,7 +117,7 @@ jobs:
             ### Metadata
 
             ```json
-            ${{ fromJSON(steps.docker_meta.outputs.metadata) }}
+            ${{ steps.docker_meta.outputs.metadata }}
             ```
 
         run: |
