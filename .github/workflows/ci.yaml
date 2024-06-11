@@ -86,7 +86,7 @@ jobs:
       packages: write
       pull-requests: write
     env:
-      BUILD_SUMMARY_PATH: ${{ github.runner.temp }}/build-summary.md
+      BUILD_SUMMARY_PATH: ${{ runner.temp }}/build-summary.md
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
