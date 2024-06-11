@@ -253,7 +253,7 @@ jobs:
             --verify-tag \
             --generate-notes \
             --target main \
-            --discussion-category "General"
+            --discussion-category "Releases"
           echo "$RELEASE_NOTES" >> $GITHUB_STEP_SUMMARY
   
   # sbom-upload:
